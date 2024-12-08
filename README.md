@@ -22,22 +22,23 @@
 
 
 ## Step-by-step Instructions
-**1. 训练一个信号模型并且保存至./pretrained_signal/result/中，以RML2016.10a数据集和ResNet56模型为例。:**
+**1. Train a signal model and save it to ./pretrained_signal/result/, taking the RML2016.10a dataset and ResNet56 model as an example:**
 ```python
 python train.py --dataset all_radio128 --model ResNet56_signal --num_epochs 50 --batch_size 128
 ```
 
-**2. 计算CKA矩阵并保存至./PSR中。需要将训练好的模型权重在./utils1/get_model.py中重新加载。:**
+**2. Calculate the CKA matrix and save it to ./PSR. The trained model weights need to be reloaded in ./utils1/get_model.py:**
 ```python
 python similarity.py --gpu 4 --arch ResNet56_signal --set all_radio128 --num_classes 11 --batch_size 128 --pretrained --evaluate 
 ```
 
-**3. 用fisher算法进行分割。首先设置好需要的分块数K=4，然后运行以下python代码，可以得到分好的块[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]进行保存。:**
+**3. Use Fisher algorithm for segmentation. First set the required number of blocks K=4, and then run the following Python code to get the divided blocks:**
 ```python
 python Network_Partition.py --arch ResNet56_signal --set all_radio128
 ```
 
-**4. 用synflow进行无数据集快速性能评估。首先需要设置好分块partition_ResNet56_signal_all_radio128 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]，其次需要定义剪枝率remain_layer = [1, 1, 1, 1]，每个块保留一层，然后在replace_layer_initialization中重新加载原始模型权重，最后运行评估代码得到需要保留的层。最终得到Remaining layers: (10,)
+**4. Use synflow for fast performance evaluation without a dataset. First, you need to set the partition_ResNet56_signal_all_radio128 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4], then define the pruning rate remain_layer = [1, 1, 1, 1], retain one layer for each block, then reload the original model weights in replace_layer_initialization, and finally run the evaluation code to get the layers that need to be retained. Finally, we get 
+Remaining layers: (10,)
 Remaining layers: (16,)
 Remaining layers: (21,)
 Remaining layers: (27,):**
