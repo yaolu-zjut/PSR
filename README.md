@@ -1,5 +1,4 @@
-# PSR
-## Step-by-step Instructions
+# Step-by-step Instructions
 **1. Train a signal model and save it to ./pretrained_signal/result/, taking the RML2016.10a dataset and ResNet56 model as an example:**
 ```python
 python train.py --dataset all_radio128 --model ResNet56_signal --num_epochs 50 --batch_size 128
@@ -35,9 +34,3 @@ python finetune.py --gpu 1 --arch ResNet56_signal_KD --set all_radio128 --batch_
 ```python
 python calculating_flops.py --gpu 3 --arch ResNet56_signal_KD --set all_radio128 --input_signal_size 128  --pretrained --evaluate
 ```
-
-## Acknowledgement
-
-[//]: # (- The evaluation of the LLM: [lm-evaluation-harness]&#40;https://github.com/EleutherAI/lm-evaluation-harness&#41;)
-
-[//]: # (- Code Framework: https://github.com/horseee/LLM-Pruner )
